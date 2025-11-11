@@ -27,13 +27,13 @@ const SubscriptionAddonModal: React.FC<Props> = ({ data, currentAddons, isOpen, 
 	const [errors, setErrors] = useState<FormErrors>({});
 	const [_, setSelectedAddonDetails] = useState<any>(null);
 
-	// Fetch available addons
+	// Fetch available addons - include all addons even if they have no charges
 	const { data: addons = [] } = useQuery({
 		queryKey: ['addons'],
 		queryFn: async () => {
 			const response = await AddonApi.ListAddon({ limit: 1000, offset: 0 });
-			const filteredAddons = response.items.filter((addon) => addon?.prices?.length > 0);
-			return filteredAddons;
+			// Return all addons, including those without prices/charges
+			return response.items;
 		},
 	});
 
